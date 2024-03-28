@@ -19,15 +19,19 @@ const SearchPopup: React.FC<{
       aria-label='Search word'
       icon={<SearchIcon />}
       key={40}
+      borderTopRadius={0}
+      borderBottomRadius={18}
       textAlign="center"
       w="full"
       p={1}
+      position="relative"
+      boxShadow='0px 2px 5px 0px #0f0f0f50'
       bg={isSearch ? 'tomato' : 'white'}
-      
+
       _hover={{ bg: 'tomato' }}
 
       onClick={(event) => {
-        
+
         event.preventDefault();
         setLetter('');
         setIsSearch(true);
@@ -36,7 +40,13 @@ const SearchPopup: React.FC<{
           position: 'top',
           isClosable: true,
           render: () => (
-            <Box color='white' p={3} bg='blue.500' borderRadius={4}>
+            <Box
+              color='white'
+              p={3} bg='blue.500'
+              borderRadius={10}
+              position="relative"
+              boxShadow='3px 5px 10px 0px #0f0f0f50'
+            >
               <SearchForm
                 close={() => {
                   toast.closeAll()

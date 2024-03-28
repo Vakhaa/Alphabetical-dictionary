@@ -20,13 +20,25 @@ const AlphabetNavagiator: React.FC<{
   const [isSearch, setIsSearch] = useState(false);
 
   return (<>
-    <VStack>
+    <VStack
+      bg="linear-gradient(to right,#ff8029,#ff9752,#ff8e42)"
+      w={{ base: "unset", md: "5%" }}
+      position="relative"
+      boxShadow='3px 0px 10px 0px #0f0f0f50'
+    >
       <SearchPopup
         setLetter={setLetter}
         isSearch={isSearch}
-        setIsSearch={setIsSearch} />
-
-      <Flex as='nav' p={1} direction={{ base: 'row', md: 'column' }} flexWrap='wrap'>
+        setIsSearch={setIsSearch}
+      />
+      <Flex
+        as='nav'
+        direction={{ base: 'row', md: 'column' }}
+        flexWrap={{ base: 'wrap', md: 'unset' }}
+        fontFamily="Plus Jakarta Sans"
+        fontSize="small"
+        alignItems="center"
+      >
         {
           alphabet.map((letter, index) => {
 
@@ -35,9 +47,11 @@ const AlphabetNavagiator: React.FC<{
               href={`/${letter.toLowerCase()}`}
               key={index}
               p={1}
-              backgroundColor={currentLetter === letter.toLowerCase() ? "tomato" : "bisque"}
+              color={currentLetter === letter.toLowerCase() ? "white" : "black"}
+              borderTop={currentLetter === letter.toLowerCase() ? "1px solid white" : "unset"}
+              borderBottom={currentLetter === letter.toLowerCase() ? "1px solid white" : "unset"}
 
-              _hover={{ color: currentLetter === letter.toLowerCase() ? 'bisque' : 'tomato' }}
+              _hover={{ color:'white' }}
 
               onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                 event.preventDefault();
@@ -45,7 +59,7 @@ const AlphabetNavagiator: React.FC<{
                 setIsSearch(false);
                 setLetter(letter.toLowerCase());
               }}>
-              {letter.toUpperCase()}, {letter.toLowerCase()}
+              {letter.toUpperCase()} {letter.toLowerCase()}
             </Box>
           })
         }

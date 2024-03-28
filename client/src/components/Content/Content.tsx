@@ -1,8 +1,6 @@
 import useSWR from 'swr';
 import {
   Flex,
-  Divider,
-  useBreakpointValue
 } from '@chakra-ui/react'
 import { WordType } from '../../types/WordType';
 import MainInformation from './MainInformation';
@@ -11,7 +9,7 @@ import AdditionalInformation from './AdditionalInformation';
 const fetcher = (url: string) => fetch(url).then(response => response.json()).catch(error => error);
 
 const Content: React.FC<{ word: WordType }> = ({ word }) => {
- 
+
   const {
     data: image,
     error,
