@@ -1,9 +1,9 @@
 import { Container, Flex, Stack } from '@chakra-ui/react';
-import './App.css';
 import AlphabetNavagiator from './components/AlphabetNavagiator';
 import LetterCard from './components/LetterCard';
 import { useState } from 'react'
 import useSWR from 'swr';
+import { Word } from './types/Word';
 
 const fetcher = (url: string) => fetch(url).then(response => response.json()).catch(error => error);
 
@@ -11,17 +11,15 @@ const App: React.FC = () => {
 
   const [letter, setLetter] = useState('');
 
-  type Word = {
-    rhymes: any
-    word: string
-    pronunciation: any
-  }
-
   const {
     data: word,
     error: wordError,
     isValidating: isWordValidating,
-  } = useSWR<Word>(letter.length >= 1 ? `http://localhost:5000/dictionary/${letter}` : null, fetcher);
+  } = useSWR<Word>(letter.length >= 1 ? `http://localhost:5000/dictionary/${letter}` : null, fetcher, {
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false
+  });
 
   return (
     <Container maxW='full' maxH='full' p={0} bg='gray.50'>
