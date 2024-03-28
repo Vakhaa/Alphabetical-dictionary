@@ -4,8 +4,10 @@ import {
   GridItem,
   VStack,
   Text,
+  Heading,
 } from '@chakra-ui/react'
 import { WordType } from '../../types/WordType';
+import Definitions from './Definitions';
 
 const AdditionalInformation: React.FC<{ word: WordType, isLoading: boolean }> = ({ word, isLoading }) => {
 
@@ -15,32 +17,30 @@ const AdditionalInformation: React.FC<{ word: WordType, isLoading: boolean }> = 
         <SimpleGrid columns={2} columnGap={3} rowGap={6} w="full">
           <GridItem colSpan={1}>
             <SkeletonText isLoaded={!isLoading} fadeDuration={4}>
-              <Text>
-                Description
-              </Text>
+              <Heading>
+                Origin
+              </Heading>
             </SkeletonText>
           </GridItem>
           <GridItem colSpan={1}>
             <SkeletonText isLoaded={!isLoading} fadeDuration={4}>
               <Text>
-                Specification
+                {word.origin}
               </Text>
             </SkeletonText>
           </GridItem>
           <GridItem colSpan={2}>
             <SkeletonText isLoaded={!isLoading} fadeDuration={4}>
-              <Text>
-                Examples
-              </Text>
+              <Definitions word={word} />
             </SkeletonText>
           </GridItem>
-          <GridItem colSpan={2}>
+          {/* <GridItem colSpan={2}>
             <SkeletonText isLoaded={!isLoading} fadeDuration={4}>
               <Text>
                 Prononsiation
               </Text>
             </SkeletonText>
-          </GridItem>
+          </GridItem> */}
         </SimpleGrid>
       </VStack>
     </>

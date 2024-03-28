@@ -8,13 +8,13 @@ const Footer = () => {
         <Button
             position="absolute"
             bottom="0"
-            left="50%"
+            left="45%"
             p={2}
             borderTopRadius={10}
             bg='#00000020'
             onClick={onOpen}
         >
-            @Vakha
+            @Denys Vynohradnyi
         </Button>
         <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
             <DrawerOverlay />
