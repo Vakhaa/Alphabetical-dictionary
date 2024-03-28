@@ -35,7 +35,7 @@ router.get('/image/:word', async function (req: Request, res: Response ) {
     console.log("image/:word", photo.data.results[0].urls.full);
 
     res.send({
-      data: photo.data.results[0].urls.full
+      data: photo.data.results[0]?.urls?.full || "https://iaaglobal.s3.amazonaws.com/bulk_images/no-image.png"
     });
   } catch (error) {
     console.error(error);

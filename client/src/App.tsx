@@ -1,9 +1,9 @@
 import { Container, Flex, Stack } from '@chakra-ui/react';
-import AlphabetNavagiator from './components/AlphabetNavagiator';
-import LetterCard from './components/LetterCard';
+import AlphabetNavagiator from './components/Navigation/AlphabetNavagiator';
+import LetterCard from './components/Content/Content';
 import { useState } from 'react'
 import useSWR from 'swr';
-import { Word } from './types/Word';
+import { WordType } from './types/WordType';
 
 const fetcher = (url: string) => fetch(url).then(response => response.json()).catch(error => error);
 
@@ -15,7 +15,7 @@ const App: React.FC = () => {
     data: word,
     error: wordError,
     isValidating: isWordValidating,
-  } = useSWR<Word>(letter.length >= 1 ? `http://localhost:5000/dictionary/${letter}` : null, fetcher, {
+  } = useSWR<WordType>(letter.length >= 1 ? `http://localhost:5000/dictionary/${letter}` : null, fetcher, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false
