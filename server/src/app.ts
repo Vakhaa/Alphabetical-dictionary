@@ -16,6 +16,7 @@ app.use(cors({
   origin: process.env.CORS_URL,
   optionsSuccessStatus: 200
 }));
+
 app.use(router);
 
 // catch 404 and forward to error handler

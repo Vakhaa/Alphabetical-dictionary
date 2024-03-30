@@ -7,7 +7,7 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/app.js",
-    "dev": "nodemon --esm app.ts ",
+    "dev": "nodemon --esm src/app.ts ",
     "debug": "node --inspect-brk dist/app.js"
   },
   "dependencies": {
@@ -18,7 +18,8 @@
     "dotenv": "^16.4.5",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "openai": "^4.30.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
