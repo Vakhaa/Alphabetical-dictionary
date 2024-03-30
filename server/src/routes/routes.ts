@@ -1,15 +1,17 @@
 import express, { Request, Response } from 'express'
 import axios from 'axios'
-import { PhotoResponseType } from '../types/PhotoResponseType';
-import { DictionaryResponseType } from '../types/DictionaryResponseType';
-import { RandomWordApiResponseType } from '../types/RandomWordApiResponseType';
 import OpenAI from "openai";
-import { WordType } from '../types/WordType';
-import { OpenAIRandomWordRequestType } from '../types/OpenAIRandomWordRequestType';
-import { LetterType } from '../types/LetterType';
-import { DictionaryWordResponseType } from '../types/DictionaryWordResponseType';
-import { PhotoApiResponseType } from '../types/PhotoApiResponseType';
-import { PhotoErrorResponseType } from '../types/PhotoErrorResponseType';
+import { PhotoResponseType } from '../infrastructure/types/PhotoResponseType';
+import { DictionaryResponseType } from '../infrastructure/types/DictionaryResponseType';
+import { RandomWordApiResponseType } from '../infrastructure/types/RandomWordApiResponseType';
+import { WordType } from '../infrastructure/types/WordType';
+import { LevelType } from '../infrastructure/types/LevelType';
+import { LetterType } from '../infrastructure/types/LetterType';
+import { DictionaryWordResponseType } from '../infrastructure/types/DictionaryWordResponseType';
+import { PhotoApiResponseType } from '../infrastructure/types/PhotoApiResponseType';
+import { LevelEnum } from '../infrastructure/LevelEnum.js';
+import { NotFoundResponseType } from '../infrastructure/types/NotFoundResponseType';
+import { BadRequestResponseType } from '../infrastructure/types/BadRequestResponseType';
 
 const openai = new OpenAI({
   organization: process.env.OPENAI_API_ORGANIZATION_ID,
@@ -20,30 +22,39 @@ const openai = new OpenAI({
 const router = express.Router();
 
 /* GET a random word from the ai */
-router.get('/openai/word/:letter/:level', async function (req: Request<OpenAIRandomWordRequestType>, res: Response<WordType>) {
+router.get('/openai/word/:letter/:level', async function (
+  req: Request<LetterType & LevelType>,
+  res: Response<WordType | NotFoundResponseType | BadRequestResponseType>
+) {
   const { letter, level } = req.params;
+
   try {
+    if (!(level in LevelEnum)) throw new Error("the wrong level");
 
     const completion = await openai.chat.completions.create({
       messages: [
-        { "role": "system", "content": `You are a dictionary for a ${level} level. Give a diffrent word each time in json. Don't repeat yourself.` },
+        { "role": "system", "content": `You are a strict dictionary for a ${level} level. Give a diffrent word each time in json. Don't repeat yourself.` },
         { "role": "user", "content": `Give me a random only one word which start with the letter "${letter}" ?` },
       ],
       model: "gpt-3.5-turbo-0125",
       response_format: { type: "json_object" }
     });
 
-    const response = JSON.parse(completion.choices[0].message.content);
+    const response = JSON.parse(completion.choices[0].message.content) as WordType;
     res.send(response);
   } catch (error) {
-    console.error(error);
-    res.sendStatus(404);
+
+    if ((error as Error).message === "the wrong level")
+      res.status(400).send({ message: (error as Error).message });
+    else
+      res.sendStatus(404);
   }
 });
 
 /* GET a random word. */
-router.get('/dictionary/:letter', async function (req: Request<LetterType>, res: Response<DictionaryWordResponseType>) {
+router.get('/dictionary/:letter', async function (req: Request<LetterType>, res: Response<DictionaryWordResponseType | NotFoundResponseType>) {
   const { letter } = req.params;
+
   try {
     const response = await axios.get<RandomWordApiResponseType>(`${process.env.URL_RANDOMWORD_API}/words/?letterPattern=^${letter}.*&random=true`, {
       headers: {
@@ -51,7 +62,7 @@ router.get('/dictionary/:letter', async function (req: Request<LetterType>, res:
         'X-RapidAPI-Host': process.env.RANDOMWORD_API_HOST
       }
     });
-    console.log(response.data);
+
     res.send({
       meanings: response.data?.results,
       phonetics: response.data?.pronunciation?.all,
@@ -64,24 +75,23 @@ router.get('/dictionary/:letter', async function (req: Request<LetterType>, res:
 });
 
 /* GET a specific word. */
-router.get('/dictionary/search/:word', async function (req: Request<WordType>, res: Response<DictionaryWordResponseType>) {
+router.get('/dictionary/search/:word', async function (req: Request<WordType>, res: Response<DictionaryWordResponseType | NotFoundResponseType>) {
 
   const { word } = req.params;
 
   try {
 
     const response = await axios.get<DictionaryResponseType>(`${process.env.URL_DICTIONARY_API}/${word}`)
-    console.log(response);
     res.send(response.data);
 
   } catch (error) {
-    console.error(error);
+
     res.sendStatus(404);
   }
 });
 
 /* GET a photo. */
-router.get('/image/:word', async function (req: Request<WordType>, res: Response<PhotoResponseType | PhotoErrorResponseType>) {
+router.get('/image/:word', async function (req: Request<WordType>, res: Response<PhotoResponseType | NotFoundResponseType>) {
 
   const { word } = req.params;
 
@@ -92,10 +102,9 @@ router.get('/image/:word', async function (req: Request<WordType>, res: Response
         'Authorization': process.env.PHOTOS_API_TOKEN
       }
     })
-    console.log("image/:word", photo.data.results[0].urls.full);
 
     if (!photo.data.results[0]?.urls?.full)
-      throw new Error("404");
+      throw new Error("https://iaaglobal.s3.amazonaws.com/bulk_images/no-image.png");
 
     res.send({
       width: photo.data.results[0].width,
@@ -104,9 +113,8 @@ router.get('/image/:word', async function (req: Request<WordType>, res: Response
       urls: photo.data.results[0].urls
     });
   } catch (error) {
-    console.error(error);
 
-    res.status(404).json({ photo: "https://iaaglobal.s3.amazonaws.com/bulk_images/no-image.png" });
+    res.status(404).json({ message: (error as Error).message });
   }
 });
 
