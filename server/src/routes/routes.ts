@@ -12,6 +12,7 @@ import { PhotoApiResponseType } from '../infrastructure/types/PhotoApiResponseTy
 import { LevelEnum } from '../infrastructure/LevelEnum.js';
 import { NotFoundResponseType } from '../infrastructure/types/NotFoundResponseType';
 import { BadRequestResponseType } from '../infrastructure/types/BadRequestResponseType';
+import { ContextType } from '../infrastructure/types/ContextType';
 
 const openai = new OpenAI({
   organization: process.env.OPENAI_API_ORGANIZATION_ID,
@@ -21,7 +22,7 @@ const openai = new OpenAI({
 
 const router = express.Router();
 
-/* GET a random word from the ai */
+/* GET a random word from the ai without context*/
 router.get('/openai/word/:letter/:level', async function (
   req: Request<LetterType & LevelType>,
   res: Response<WordType | NotFoundResponseType | BadRequestResponseType>
@@ -34,6 +35,37 @@ router.get('/openai/word/:letter/:level', async function (
     const completion = await openai.chat.completions.create({
       messages: [
         { "role": "system", "content": `You are a strict dictionary for a ${level} level. Give a diffrent word each time in json. Don't repeat yourself.` },
+        { "role": "user", "content": `Give me a random only one word which start with the letter "${letter}" ?` },
+      ],
+      model: "gpt-3.5-turbo-0125",
+      response_format: { type: "json_object" }
+    });
+
+    const response = JSON.parse(completion.choices[0].message.content) as WordType;
+    res.send(response);
+  } catch (error) {
+
+    if ((error as Error).message === "the wrong level")
+      res.status(400).send({ message: (error as Error).message });
+    else
+      res.sendStatus(404);
+  }
+});
+
+/* GET a random word from the ai with context*/
+router.get('/openai/word/:letter/:level/:context', async function (
+  req: Request<LetterType & LevelType & ContextType>,
+  res: Response<WordType | NotFoundResponseType | BadRequestResponseType>
+) {
+  const { letter, level, context } = req.params;
+
+  try {
+    if (!(level in LevelEnum)) throw new Error("the wrong level");
+
+    const completion = await openai.chat.completions.create({
+      messages: [
+        { "role": "system", "content": `You are a strict dictionary for a ${level} level. Give a diffrent word each time in json. Don't repeat yourself.` },
+        { "role": "system", "content": `The context of word, the theme of the dictionary must be ${context}.` },
         { "role": "user", "content": `Give me a random only one word which start with the letter "${letter}" ?` },
       ],
       model: "gpt-3.5-turbo-0125",

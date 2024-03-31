@@ -24,7 +24,7 @@ const FiltersModal: React.FC<{
   setContext: React.Dispatch<React.SetStateAction<string>>
 }> = ({ isOpen, onClose, setLevel, setContext }) => {
 
-  const [radio, setRadio] = useState('B1');
+  const [radio, setRadio] = useState('intermediate');
   const [input, setInput] = useState('');
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => setInput(event.target.value)
 
@@ -41,17 +41,14 @@ const FiltersModal: React.FC<{
                 <Text>Word difficulty level:</Text>
                 <RadioGroup onChange={setRadio} value={radio}>
                   <Stack direction='row'>
-                    <Radio value='A1'>A1</Radio>
-                    <Radio value='A2'>A2</Radio>
-                    <Radio value='B1'>B1</Radio>
-                    <Radio value='B2'>B2</Radio>
-                    <Radio value='C1'>C1</Radio>
-                    <Radio value='C2'>C2</Radio>
+                    <Radio value='beginner'>Beginner</Radio>
+                    <Radio value='intermediate'>Intermediate</Radio>
+                    <Radio value='advanced'>Advanced</Radio>
                   </Stack>
                 </RadioGroup>
               </Stack>
               <Stack w="100%">
-                <Text>Context</Text>
+                <Text>Context:</Text>
                 <Input
                   type='text'
                   placeholder="Animals"
@@ -69,8 +66,7 @@ const FiltersModal: React.FC<{
               <Button onClick={() => {
 
                 setLevel(radio);
-                if (input != '')
-                  setContext(input);
+                setContext(input);
                 onClose();
 
               }}>Save</Button>
