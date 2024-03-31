@@ -1,26 +1,32 @@
 import {
   Text,
   Heading,
+  Box,
+  Divider,
+  Stack,
 } from '@chakra-ui/react'
-import { WordType } from '../../types/WordType';
+import { DictionaryWordType } from '../../types/DictionaryWordType';
 
-const Definitions: React.FC<{ word: WordType }> = ({ word }) => {
+const Definitions: React.FC<{ dictionaryWord: DictionaryWordType | undefined }> = ({ dictionaryWord }) => {
 
   return (
     <>
-      {word?.meanings?.map(meaning => {
+      {dictionaryWord && dictionaryWord?.meanings?.map(meaning => {
 
         return <>
-          <Heading>{meaning.partOfSpeech}</Heading>
-          <Heading>Definitions:</Heading>
-          {meaning.definitions.map((unit, index) => {
-            return <>
-              <Text>{index + 1}. {unit.definition}</Text>
-              <Text>Example: {unit.example}</Text>
-              <Synonyms synonyms={unit.synonyms} />
-              <Antonyms antonyms={unit.antonyms} />
-            </>
-          })}
+          <Box mb={5} mt={5}>
+            <Heading as="h3" size="lg">Part of speech: {meaning.partOfSpeech}</Heading>
+            {meaning.definitions.map((unit, index) => {
+              return <Stack as="span">
+                <Heading as="h4" size="md" mt={1} >Definitions:</Heading>
+                <Text>{index + 1}. {unit.definition}</Text>
+                {unit.example && <Text>Example: {unit.example}</Text>}
+                <Synonyms synonyms={unit.synonyms} />
+                <Antonyms antonyms={unit.antonyms} />
+              </Stack>
+            })}
+          </Box>
+          <Divider borderColor='#00000050' />
         </>
       })}
     </>
@@ -31,15 +37,15 @@ export default Definitions;
 
 const Synonyms: React.FC<{ synonyms: string[] }> = ({ synonyms }) => {
 
-  if (synonyms.length >= 1) return <></>;
+  if (synonyms.length < 1) return <></>;
 
 
   return (
     <>
-      <Heading>Synonums:</Heading>
+      <Heading as="h4" size="md">Synonums:</Heading>
       <Text>
         {synonyms.map((synonym, index) => {
-          return `${index}. ${synonym} \n`
+          return `${index+1}. ${synonym} \n`
         })}
       </Text>
     </>
@@ -48,15 +54,15 @@ const Synonyms: React.FC<{ synonyms: string[] }> = ({ synonyms }) => {
 
 const Antonyms: React.FC<{ antonyms: string[] }> = ({ antonyms }) => {
 
-  if (antonyms.length >= 1) return <></>;
+  if (antonyms.length < 1) return <></>;
 
 
   return (
     <>
-      <Heading>Synonums:</Heading>
+      <Heading as="h4" size="md">Antonyms:</Heading>
       <Text>
         {antonyms.map((antonym, index) => {
-          return `${index}. ${antonym} \n`
+          return `${index+1}. ${antonym} \n`
         })}
       </Text>
     </>

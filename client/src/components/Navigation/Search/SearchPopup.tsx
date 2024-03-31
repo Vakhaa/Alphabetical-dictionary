@@ -10,8 +10,9 @@ import { SearchIcon } from "@chakra-ui/icons";
 const SearchPopup: React.FC<{
   isSearch: boolean,
   setLetter: Dispatch<SetStateAction<string>>,
+  setSearch: Dispatch<SetStateAction<string>>,
   setIsSearch: Dispatch<SetStateAction<boolean>>
-}> = ({ isSearch, setIsSearch, setLetter }) => {
+}> = ({ isSearch, setIsSearch, setSearch, setLetter }) => {
 
   const toast = useToast();
   return (<>
@@ -34,6 +35,7 @@ const SearchPopup: React.FC<{
 
         event.preventDefault();
         setLetter('');
+        setSearch('');
         setIsSearch(true);
 
         return toast({
@@ -52,7 +54,7 @@ const SearchPopup: React.FC<{
                   toast.closeAll()
                 }}
                 setWord={(word) => {
-                  setLetter(word.toLowerCase());
+                  setSearch(word.toLowerCase());
                 }} />
             </Box>),
         })

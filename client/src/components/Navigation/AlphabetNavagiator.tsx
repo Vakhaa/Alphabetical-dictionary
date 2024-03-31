@@ -9,15 +9,18 @@ import {
   VStack
 } from "@chakra-ui/react";
 import SearchPopup from "./Search/SearchPopup";
+import { useSWRConfig } from 'swr'
 
 const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
 const AlphabetNavagiator: React.FC<{
   currentLetter: string,
-  setLetter: Dispatch<SetStateAction<string>>
-}> = ({ currentLetter, setLetter }) => {
+  setLetter: Dispatch<SetStateAction<string>>,
+  setSearch: Dispatch<SetStateAction<string>>
+}> = ({ currentLetter, setLetter, setSearch }) => {
 
   const [isSearch, setIsSearch] = useState(false);
+  const { mutate } = useSWRConfig(); // for clearing cache
 
   return (<>
     <VStack
@@ -28,6 +31,7 @@ const AlphabetNavagiator: React.FC<{
     >
       <SearchPopup
         setLetter={setLetter}
+        setSearch={setSearch}
         isSearch={isSearch}
         setIsSearch={setIsSearch}
       />
@@ -56,6 +60,8 @@ const AlphabetNavagiator: React.FC<{
               onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                 event.preventDefault();
 
+                mutate(`http://localhost:5000/openai/word/${letter.toLowerCase()}/B1/`, undefined);
+                setSearch('');
                 setIsSearch(false);
                 setLetter(letter.toLowerCase());
               }}>
