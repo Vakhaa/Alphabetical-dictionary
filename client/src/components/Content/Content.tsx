@@ -19,7 +19,7 @@ const Content: React.FC<{ word: DictionaryWordType | undefined, isWordLoading: b
 
   return (
     <>
-      <Flex h="full" w="full" direction={{ base: 'column', md: 'row' }} align='center'>
+      <Flex h="full" w="full" direction={{ base: 'column', md: 'row' }} align='center' gap={10}>
         {(image && word) && <MainInformation image={image} word={word} isLoading={isImageLoading && isWordLoading} />}
         <AdditionalInformation dictionaryWord={word} isLoading={isWordLoading} />
       </Flex>

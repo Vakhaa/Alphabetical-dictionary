@@ -30,7 +30,7 @@ const MainInformation: React.FC<{
   }, [word, word?.phonetics[0].audio])
 
   return (
-    <VStack w={{ base: '100%', md: '50%' }} pb={{ base: '15px', md: '0px' }} >
+    <VStack w={{ base: '100%', md: '50%' }} >
       <SimpleGrid columns={1} columnGap={3} rowGap={6} w="fit-content">
 
         <GridItem colSpan={1}>

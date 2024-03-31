@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import SearchPopup from "./Search/SearchPopup";
 import { useSWRConfig } from 'swr'
+import { uid } from 'uid/single';
 
 const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
@@ -44,18 +45,18 @@ const AlphabetNavagiator: React.FC<{
         alignItems="center"
       >
         {
-          alphabet.map((letter, index) => {
+          alphabet.map((letter) => {
 
             return <Box
               as="a"
               href={`/${letter.toLowerCase()}`}
-              key={index}
+              key={uid()}
               p={1}
               color={currentLetter === letter.toLowerCase() ? "white" : "black"}
               borderTop={currentLetter === letter.toLowerCase() ? "1px solid white" : "unset"}
               borderBottom={currentLetter === letter.toLowerCase() ? "1px solid white" : "unset"}
 
-              _hover={{ color:'white' }}
+              _hover={{ color: 'white' }}
 
               onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                 event.preventDefault();

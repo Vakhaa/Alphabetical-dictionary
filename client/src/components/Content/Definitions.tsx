@@ -6,6 +6,7 @@ import {
   Stack,
 } from '@chakra-ui/react'
 import { DictionaryWordType } from '../../types/DictionaryWordType';
+import { uid } from 'uid/single';
 
 const Definitions: React.FC<{ dictionaryWord: DictionaryWordType | undefined }> = ({ dictionaryWord }) => {
 
@@ -13,11 +14,11 @@ const Definitions: React.FC<{ dictionaryWord: DictionaryWordType | undefined }> 
     <>
       {dictionaryWord && dictionaryWord?.meanings?.map(meaning => {
 
-        return <>
+        return <Stack as="span" key={uid(5)}>
           <Box mb={5} mt={5}>
             <Heading as="h3" size="lg">Part of speech: {meaning.partOfSpeech}</Heading>
             {meaning.definitions.map((unit, index) => {
-              return <Stack as="span">
+              return <Stack as="span" key={uid(5)}>
                 <Heading as="h4" size="md" mt={1} >Definitions:</Heading>
                 <Text>{index + 1}. {unit.definition}</Text>
                 {unit.example && <Text>Example: {unit.example}</Text>}
@@ -27,7 +28,7 @@ const Definitions: React.FC<{ dictionaryWord: DictionaryWordType | undefined }> 
             })}
           </Box>
           <Divider borderColor='#00000050' />
-        </>
+        </Stack>
       })}
     </>
   );
@@ -45,7 +46,7 @@ const Synonyms: React.FC<{ synonyms: string[] }> = ({ synonyms }) => {
       <Heading as="h4" size="md">Synonums:</Heading>
       <Text>
         {synonyms.map((synonym, index) => {
-          return `${index+1}. ${synonym} \n`
+          return `${index + 1}. ${synonym} \n`
         })}
       </Text>
     </>
@@ -62,7 +63,7 @@ const Antonyms: React.FC<{ antonyms: string[] }> = ({ antonyms }) => {
       <Heading as="h4" size="md">Antonyms:</Heading>
       <Text>
         {antonyms.map((antonym, index) => {
-          return `${index+1}. ${antonym} \n`
+          return `${index + 1}. ${antonym} \n`
         })}
       </Text>
     </>
