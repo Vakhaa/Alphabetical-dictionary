@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express'
 import axios from 'axios'
 import OpenAI from "openai";
+import { MailerSend, EmailParams, Recipient, Sender } from 'mailersend'
 import { PhotoResponseType } from '../infrastructure/types/PhotoResponseType';
 import { DictionaryResponseType } from '../infrastructure/types/DictionaryResponseType';
 import { RandomWordApiResponseType } from '../infrastructure/types/RandomWordApiResponseType';
@@ -13,12 +14,16 @@ import { LevelEnum } from '../infrastructure/LevelEnum.js';
 import { NotFoundResponseType } from '../infrastructure/types/NotFoundResponseType';
 import { BadRequestResponseType } from '../infrastructure/types/BadRequestResponseType';
 import { ContextType } from '../infrastructure/types/ContextType';
+import { MailBodyRequestType } from '../infrastructure/types/MailBodyRequestType';
 
 const openai = new OpenAI({
   organization: process.env.OPENAI_API_ORGANIZATION_ID,
   apiKey: process.env.OPENAI_API_KEY
 });
 
+const mailersend = new MailerSend({
+  apiKey: process.env.SEND_MAILER_TOKEN,
+});
 
 const router = express.Router();
 
@@ -87,6 +92,8 @@ router.get('/openai/word/:letter/:level/:context', async function (
 router.get('/dictionary/:letter', async function (req: Request<LetterType>, res: Response<DictionaryWordResponseType | NotFoundResponseType>) {
   const { letter } = req.params;
 
+  console.info('Endpoint /dictionary/:letter is deprecated. Use insted openai/word/:letter/:level or openai/word/:letter/:level/:contexts');
+
   try {
     const response = await axios.get<RandomWordApiResponseType>(`${process.env.URL_RANDOMWORD_API}/words/?letterPattern=^${letter}.*&random=true`, {
       headers: {
@@ -149,5 +156,41 @@ router.get('/image/:word', async function (req: Request<WordType>, res: Response
     res.status(404).json({ message: (error as Error).message });
   }
 });
+
+/* Send the email. */
+router.post('/mail/send', async function (req: Request, res: Response) {
+
+  const {
+    name,
+    email,
+    message
+  } = req.body as MailBodyRequestType
+
+  try {
+
+    if (name === '' || email === '' || message === '') throw new Error("Bad Request");
+    if (!name || !email || !message) throw new Error("Bad Request");
+
+    const recipients = [new Recipient("denys.vynohradnyi.dev@gmail.com", "Denys Vynohradnyi")];
+    const sender = new Sender("info@trial-x2p0347ym834zdrn.mlsender.net", "Alphabetic Dictionary");
+    const emailParams = new EmailParams()
+      .setFrom(sender)
+      .setTo(recipients)
+      .setReplyTo(sender)
+      .setSubject(`Alphabetic Dictionary Form: ${name} <${email}>`)
+      .setText(message);
+
+    const response = await mailersend.email.send(emailParams);
+    res.sendStatus(response.statusCode);
+
+  } catch (error) {
+    if ((error as Error).message === "Bad Request")
+      res.sendStatus(400);
+    else
+      res.status(500).send(error);
+  }
+});
+
+
 
 export default router;
