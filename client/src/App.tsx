@@ -30,7 +30,9 @@ const App: React.FC = () => {
 
   const {
     data: wordWithContext,
-  } = useSWR<WordType>((letter.length >= 1) && context !== '' ? `http://localhost:5000/openai/word/${letter}/${level}/${context}` : null, fetcher, {
+  } = useSWR<WordType>((letter.length >= 1) && context !== '' ?
+    `http://localhost:5000/openai/word/${letter}/${level}/${context}` :
+    null, fetcher, {
     revalidateOnFocus: false,
   }
   );
@@ -48,7 +50,7 @@ const App: React.FC = () => {
   );
 
   return (
-    <Container maxW='full' maxH='full' p={0} bg='gray.50' overflow={{ base: "scroll", md: "clip" }}>
+    <Container maxW='100vw' maxH='100vh' p={0} bg='gray.50' overflow={{ base: "scroll", md: "clip" }}>
       <Flex h="100vh" w="100%" direction={{ base: 'column', md: 'row' }} gap="0"  >
         <AlphabetNavagiator currentLetter={letter} setLetter={setLetter} setSearch={setSearch} />
         <VStack as="div" w="full" h="full"
