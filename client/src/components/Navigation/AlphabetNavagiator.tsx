@@ -16,9 +16,11 @@ const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M
 
 const AlphabetNavagiator: React.FC<{
   currentLetter: string,
+  level: string,
   setLetter: Dispatch<SetStateAction<string>>,
-  setSearch: Dispatch<SetStateAction<string>>
-}> = ({ currentLetter, setLetter, setSearch }) => {
+  setSearch: Dispatch<SetStateAction<string>>,
+  setIsHome: Dispatch<SetStateAction<boolean>>
+}> = ({ currentLetter, level, setLetter, setSearch, setIsHome }) => {
 
   const [isSearch, setIsSearch] = useState(false);
   const { mutate } = useSWRConfig(); // for clearing cache
@@ -35,6 +37,7 @@ const AlphabetNavagiator: React.FC<{
         setSearch={setSearch}
         isSearch={isSearch}
         setIsSearch={setIsSearch}
+        setIsHome={setIsHome}
       />
       <Flex
         as='nav'
@@ -60,8 +63,9 @@ const AlphabetNavagiator: React.FC<{
 
               onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                 event.preventDefault();
+                setIsHome(false);
 
-                mutate(`http://localhost:5000/openai/word/${letter.toLowerCase()}/B1/`, undefined);
+                mutate(`http://localhost:5000/openai/word/${letter.toLowerCase()}/${level}/`, undefined);
                 setSearch('');
                 setIsSearch(false);
                 setLetter(letter.toLowerCase());

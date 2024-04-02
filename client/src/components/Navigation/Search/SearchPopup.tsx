@@ -11,8 +11,9 @@ const SearchPopup: React.FC<{
   isSearch: boolean,
   setLetter: Dispatch<SetStateAction<string>>,
   setSearch: Dispatch<SetStateAction<string>>,
-  setIsSearch: Dispatch<SetStateAction<boolean>>
-}> = ({ isSearch, setIsSearch, setSearch, setLetter }) => {
+  setIsSearch: Dispatch<SetStateAction<boolean>>,
+  setIsHome: Dispatch<SetStateAction<boolean>>,
+}> = ({ isSearch, setIsSearch, setSearch, setLetter, setIsHome }) => {
 
   const toast = useToast();
   return (<>
@@ -34,6 +35,7 @@ const SearchPopup: React.FC<{
       onClick={(event) => {
 
         event.preventDefault();
+        setIsHome(false);
         setLetter('');
         setSearch('');
         setIsSearch(true);

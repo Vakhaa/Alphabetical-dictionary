@@ -8,6 +8,7 @@ import Footer from './components/Footer/Footer';
 import { DictionaryWordType } from './types/DictionaryWordType';
 import NotFoundContent from './components/NotFoundContent';
 import Filters from './components/Filters/Filters';
+import WelcomeHome from './components/WelcomeHome';
 
 const fetcher = (url: string) => fetch(url).then(response => response.json());
 
@@ -17,6 +18,8 @@ const App: React.FC = () => {
   const [search, setSearch] = useState('');
   const [level, setLevel] = useState('intermediate');
   const [context, setContext] = useState('');
+
+  const [isHome, setIsHome] = useState(true);
 
   const {
     data: wordWithoutContext,
@@ -52,7 +55,7 @@ const App: React.FC = () => {
   return (
     <Container maxW='100vw' maxH='100vh' p={0} bg='gray.50' overflow={{ base: "scroll", md: "clip" }}>
       <Flex h="100vh" w="100%" direction={{ base: 'column', md: 'row' }} gap="0"  >
-        <AlphabetNavagiator currentLetter={letter} setLetter={setLetter} setSearch={setSearch} />
+        <AlphabetNavagiator currentLetter={letter} level={level} setLetter={setLetter} setSearch={setSearch} setIsHome={setIsHome}/>
         <VStack as="div" w="full" h="full"
           p={{ base: 2, md: 10 }}
           pl={{ base: 10, md: 5 }}
@@ -61,6 +64,7 @@ const App: React.FC = () => {
           bg="#F5F5F5" position="relative">
           <Filters setLevel={setLevel} setContext={setContext} />
           {dictionaryWord && <Content word={dictionaryWord[0]} isWordLoading={isDictionaryWordLoading} />}
+          {isHome && <WelcomeHome />}
           {dictionaryWordError && <NotFoundContent />}
         </VStack>
 
