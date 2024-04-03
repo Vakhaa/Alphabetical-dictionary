@@ -55,7 +55,7 @@ const App: React.FC = () => {
   return (
     <Container maxW='100vw' maxH='100vh' p={0} bg='gray.50' overflow={{ base: "scroll", md: "clip" }}>
       <Flex h="100vh" w="100%" direction={{ base: 'column', md: 'row' }} gap="0"  >
-        <AlphabetNavagiator currentLetter={letter} level={level} setLetter={setLetter} setSearch={setSearch} setIsHome={setIsHome}/>
+        <AlphabetNavagiator currentLetter={letter} level={level} setLetter={setLetter} setSearch={setSearch} setIsHome={setIsHome} />
         <VStack as="div" w="full" h="full"
           p={{ base: 2, md: 10 }}
           pl={{ base: 10, md: 5 }}
@@ -63,7 +63,7 @@ const App: React.FC = () => {
           alignItems={'flex-start'}
           bg="#F5F5F5" position="relative">
           <Filters setLevel={setLevel} setContext={setContext} />
-          {dictionaryWord && <Content word={dictionaryWord[0]} isWordLoading={isDictionaryWordLoading} />}
+          {(dictionaryWord || (!dictionaryWord && isDictionaryWordLoading)) && <Content words={dictionaryWord} isWordLoading={isDictionaryWordLoading} />}
           {isHome && <WelcomeHome />}
           {dictionaryWordError && <NotFoundContent />}
         </VStack>

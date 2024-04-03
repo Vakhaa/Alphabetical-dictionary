@@ -17,7 +17,7 @@ const AdditionalInformation: React.FC<{ dictionaryWord: DictionaryWordType | und
           columnGap={3}
           rowGap={6}
           w="full"
-          overflowY={{base: "unset", md:"auto"}}
+          overflowY={{ base: "unset", md: "auto" }}
           textAlign="left"
         >
           {/* <GridItem colSpan={1}>
@@ -36,7 +36,7 @@ const AdditionalInformation: React.FC<{ dictionaryWord: DictionaryWordType | und
             </SkeletonText>
           </GridItem> */}
           <GridItem colSpan={2}>
-            <SkeletonText isLoaded={!isLoading} fadeDuration={4}>
+            <SkeletonText isLoaded={!isLoading} fadeDuration={6} mt='14' spacing='4' noOfLines={10} skeletonHeight='4'>
               <Definitions dictionaryWord={dictionaryWord} />
             </SkeletonText>
           </GridItem>
