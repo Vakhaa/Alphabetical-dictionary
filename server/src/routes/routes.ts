@@ -27,7 +27,15 @@ const mailersend = new MailerSend({
 
 const router = express.Router();
 
-/* GET a random word from the ai without context*/
+/**
+ *  GET /openai/word/{letter}/{level}
+ * @summary Get a random word from the open ai without context
+ * @param {string} letter.path.required
+ * @param {string} level.path.required - enum:beginner,intermediate,advanced
+ * @return {WordType} 200 - success response - application/json
+ * @return {NotFoundResponseType} 404 - Not found response - application/json
+ * @return {BadRequestResponseType} 400 - Bad Request response - application/json
+ */
 router.get('/openai/word/:letter/:level', async function (
   req: Request<LetterType & LevelType>,
   res: Response<WordType | NotFoundResponseType | BadRequestResponseType>
@@ -57,7 +65,16 @@ router.get('/openai/word/:letter/:level', async function (
   }
 });
 
-/* GET a random word from the ai with context*/
+/**
+ *  GET /openai/word/{letter}/{level}/{context}
+ * @summary Get a random word from the open ai with context
+ * @param {string} letter.path.required
+ * @param {string} level.path.required - enum:beginner,intermediate,advanced
+ * @param {string} context.path.required
+ * @return {WordType} 200 - success response - application/json
+ * @return {NotFoundResponseType} 404 - Not found response - application/json
+ * @return {BadRequestResponseType} 400 - Bad Request response - application/json
+ */
 router.get('/openai/word/:letter/:level/:context', async function (
   req: Request<LetterType & LevelType & ContextType>,
   res: Response<WordType | NotFoundResponseType | BadRequestResponseType>
@@ -88,7 +105,14 @@ router.get('/openai/word/:letter/:level/:context', async function (
   }
 });
 
-/* GET a random word. */
+/**
+ *  GET /dictionary/{letter}
+ * @summary Get a random word from the random word dictionary api
+ * @deprecated
+ * @param {string} letter.path.required
+ * @return {DictionaryWordResponseType} 200 - success response - application/json
+ * @return {NotFoundResponseType} 404 - Not found response - application/json
+ */
 router.get('/dictionary/:letter', async function (req: Request<LetterType>, res: Response<DictionaryWordResponseType | NotFoundResponseType>) {
   const { letter } = req.params;
 
@@ -113,7 +137,13 @@ router.get('/dictionary/:letter', async function (req: Request<LetterType>, res:
   }
 });
 
-/* GET a specific word. */
+/**
+ *  GET /dictionary/search/{word}
+ * @summary Get a specific word with explanations and other data
+ * @param {string} word.path.required
+ * @return {DictionaryWordResponseType} 200 - success response - application/json
+ * @return {NotFoundResponseType} 404 - Not found response - application/json
+ */
 router.get('/dictionary/search/:word', async function (req: Request<WordType>, res: Response<DictionaryWordResponseType | NotFoundResponseType>) {
 
   const { word } = req.params;
@@ -129,7 +159,13 @@ router.get('/dictionary/search/:word', async function (req: Request<WordType>, r
   }
 });
 
-/* GET a photo. */
+/**
+ *  GET /image/{word}
+ * @summary Get a image by a word from the image api
+ * @param {string} word.path.required
+ * @return {DictionaryWordResponseType} 200 - success response - application/json
+ * @return {NotFoundResponseType} 404 - Not found response - application/json
+ */
 router.get('/image/:word', async function (req: Request<WordType>, res: Response<PhotoResponseType | NotFoundResponseType>) {
 
   const { word } = req.params;
@@ -157,7 +193,14 @@ router.get('/image/:word', async function (req: Request<WordType>, res: Response
   }
 });
 
-/* Send the email. */
+/**
+ *  POST /mail/send
+ * @summary Send the email to me
+ * @param {MailBodyRequestType} request.body.required 
+ * @return {object} 202 - Accepted  response - application/json
+ * @return {object} 400 - Bad Request response - application/json
+ * @return {object} 500 - Internal Server Error response - application/json
+ */
 router.post('/mail/send', async function (req: Request, res: Response) {
 
   const {
@@ -170,6 +213,7 @@ router.post('/mail/send', async function (req: Request, res: Response) {
 
     if (name === '' || email === '' || message === '') throw new Error("Bad Request");
     if (!name || !email || !message) throw new Error("Bad Request");
+    if (!email.match('@')) throw new Error("Bad Request");
 
     const recipients = [new Recipient("denys.vynohradnyi.dev@gmail.com", "Denys Vynohradnyi")];
     const sender = new Sender("info@trial-x2p0347ym834zdrn.mlsender.net", "Alphabetic Dictionary");

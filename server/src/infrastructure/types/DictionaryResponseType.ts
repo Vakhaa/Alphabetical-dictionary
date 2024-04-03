@@ -1,28 +1,15 @@
+import { DictionaryMeaningsType } from "./DictionaryMeaningsType"
+import { DictionaryPhoneticsType } from "./DictionaryPhoneticsType"
 
+/**
+ * The type of response from the dictionary api
+ * @typedef {object} DictionaryResponseType
+ * @property {string} words.required
+ * @property {DictionaryPhoneticsType} phonetics.required
+ * @property {DictionaryMeaningsType[]} meanings.required
+ */
 export type DictionaryResponseType = {
     word: string
     phonetics: DictionaryPhoneticsType
-    meanings: DictionaryMeaningsType
+    meanings: DictionaryMeaningsType[]
 }
-
-export type DictionaryMeaningsType = [
-    {
-        "partOfSpeech": string,
-        "definitions": [
-            {
-                "definition": string,
-                "example": string,
-                "synonyms": string[],
-                "antonyms": string[]
-            }
-        ]
-    }
-]
-
-export type DictionaryPhoneticsType = [
-    {
-        text: string,
-        audio?: string,
-    }
-]
-

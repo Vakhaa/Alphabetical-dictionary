@@ -4,6 +4,7 @@ import express, { Express, Request, Response } from 'express'
 import cookieParser from 'cookie-parser'
 import logger from 'morgan'
 import cors from 'cors'
+import expressJSDocSwagger from 'express-jsdoc-swagger'
 import router from './routes/routes.js'
 
 var app: Express = express();
@@ -16,6 +17,29 @@ app.use(cors({
   origin: process.env.CORS_URL,
   optionsSuccessStatus: 200
 }));
+
+const options = {
+  info: {
+    version: "0.1.0",
+    title: "Alphabetic Dictionary API with Swagger",
+    description:
+      "This is a simple REST API application made with Express, Typescript and documented with Swagger",
+    license: {
+      name: "MIT",
+      url: "https://spdx.org/licenses/MIT.html",
+    },
+    contact: {
+      name: "Denys Vynohradnyi",
+      url: "https://github.com/Vakhaa",
+      email: "denys.vynohradnyi.dev@gmail.com",
+    },
+  },
+  baseDir: process.cwd(), 
+  filesPattern: './**/*.{ts,js}',
+  swaggerUIPath: '/api-docs',
+};
+
+expressJSDocSwagger(app)(options);
 
 app.use(router);
 
