@@ -4,7 +4,6 @@ FROM node:19-alpine3.15 AS builder
 # Declaring env
 ENV NODE_ENV production
 ENV HOST="0.0.0.0"
-ENV REACT_APP_SERVER="http://localhost:5000"
 
 # Setting up the work directory
 WORKDIR /app

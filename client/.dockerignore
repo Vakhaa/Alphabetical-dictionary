@@ -7,3 +7,4 @@ bild
 .git
 docker-compose.yml
 *.md
+development.env
