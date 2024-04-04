@@ -15,6 +15,7 @@ import { NotFoundResponseType } from '../infrastructure/types/NotFoundResponseTy
 import { BadRequestResponseType } from '../infrastructure/types/BadRequestResponseType';
 import { ContextType } from '../infrastructure/types/ContextType';
 import { MailBodyRequestType } from '../infrastructure/types/MailBodyRequestType';
+import { rateLimit } from 'express-rate-limit'
 
 const openai = new OpenAI({
   organization: process.env.OPENAI_API_ORGANIZATION_ID,
@@ -159,6 +160,15 @@ router.get('/dictionary/search/:word', async function (req: Request<WordType>, r
   }
 });
 
+
+const imageLimiter = rateLimit({
+  windowMs: 4 * 15 * 60 * 1000, // 15 minutes
+  limit: 10, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+  standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+  // store: ... , // Redis, Memcached, etc. See below.
+})
+
 /**
  *  GET /image/{word}
  * @summary Get a image by a word from the image api
@@ -166,7 +176,7 @@ router.get('/dictionary/search/:word', async function (req: Request<WordType>, r
  * @return {DictionaryWordResponseType} 200 - success response - application/json
  * @return {NotFoundResponseType} 404 - Not found response - application/json
  */
-router.get('/image/:word', async function (req: Request<WordType>, res: Response<PhotoResponseType | NotFoundResponseType>) {
+router.get('/image/:word', imageLimiter, async function (req: Request<WordType>, res: Response<PhotoResponseType | NotFoundResponseType>) {
 
   const { word } = req.params;
 
@@ -174,7 +184,9 @@ router.get('/image/:word', async function (req: Request<WordType>, res: Response
 
     const photo = await axios.get<PhotoApiResponseType>(`${process.env.URL_PHOTOS_API}/search/photos?query=${word}&per_page=1`, {
       headers: {
-        'Authorization': process.env.PHOTOS_API_TOKEN
+        'Authorization': process.env.PHOTOS_API_TOKEN,
+        "X-Ratelimit-Limit": "2",
+        "X-Ratelimit-Remaining": "1"
       }
     })
 
@@ -210,6 +222,9 @@ router.post('/mail/send', async function (req: Request, res: Response) {
   } = req.body as MailBodyRequestType
 
   try {
+
+    const quotaresponse = await mailersend.others.getApiQuota();
+    if (quotaresponse?.body.remaining < 1) throw new Error("used quota of mails");
 
     if (name === '' || email === '' || message === '') throw new Error("Bad Request");
     if (!name || !email || !message) throw new Error("Bad Request");
