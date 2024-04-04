@@ -16,14 +16,14 @@ const App: React.FC = () => {
 
   const [letter, setLetter] = useState('');
   const [search, setSearch] = useState('');
-  const [level, setLevel] = useState('intermediate');
+  const [level, setLevel] = useState('beginner');
   const [context, setContext] = useState('');
 
   const [isHome, setIsHome] = useState(true);
 
   const {
     data: wordWithoutContext,
-  } = useSWR<WordType>((letter.length >= 1) && context === '' ? `http://localhost:5000/openai/word/${letter}/${level}/` : null, fetcher, {
+  } = useSWR<WordType>((letter.length >= 1) && context === '' ? `${process.env.REACT_APP_SERVER}/openai/word/${letter}/${level}/` : null, fetcher, {
     // for caching
     // revalidateIfStale: false,
     revalidateOnFocus: false,
@@ -34,7 +34,7 @@ const App: React.FC = () => {
   const {
     data: wordWithContext,
   } = useSWR<WordType>((letter.length >= 1) && context !== '' ?
-    `http://localhost:5000/openai/word/${letter}/${level}/${context}` :
+    `${process.env.REACT_APP_SERVER}/openai/word/${letter}/${level}/${context}` :
     null, fetcher, {
     revalidateOnFocus: false,
   }
@@ -48,7 +48,7 @@ const App: React.FC = () => {
     isLoading: isDictionaryWordLoading,
   } = useSWR<DictionaryWordType[], { message?: string }>(
     (word || search.length > 1) ?
-      `http://localhost:5000/dictionary/search/${word?.word.toLowerCase() || search}` :
+      `${process.env.REACT_APP_SERVER}/dictionary/search/${word?.word.toLowerCase() || search}` :
       null, fetcher
   );
 

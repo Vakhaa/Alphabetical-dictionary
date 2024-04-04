@@ -65,7 +65,7 @@ const AlphabetNavagiator: React.FC<{
                 event.preventDefault();
                 setIsHome(false);
 
-                mutate(`http://localhost:5000/openai/word/${letter.toLowerCase()}/${level}/`, undefined);
+                mutate(`${process.env.REACT_APP_SERVER}/openai/word/${letter.toLowerCase()}/${level}/`, undefined);
                 setSearch('');
                 setIsSearch(false);
                 setLetter(letter.toLowerCase());

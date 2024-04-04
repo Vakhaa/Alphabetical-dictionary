@@ -24,7 +24,7 @@ const FiltersModal: React.FC<{
   setContext: React.Dispatch<React.SetStateAction<string>>
 }> = ({ isOpen, onClose, setLevel, setContext }) => {
 
-  const [radio, setRadio] = useState('intermediate');
+  const [radio, setRadio] = useState('beginner');
   const [input, setInput] = useState('');
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => setInput(event.target.value)
 
