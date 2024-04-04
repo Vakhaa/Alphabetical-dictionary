@@ -55,8 +55,8 @@ const MainInformation: React.FC<{
         </GridItem>
         {/* box size for skeleton */}
         <GridItem colSpan={1}>
-          <Skeleton isLoaded={!isLoading} fadeDuration={2} boxSize="400px">
-            {image && <Image src={image.urls?.raw || image.message} objectFit='cover' alt={word?.word} boxSize="400px" />}
+          <Skeleton isLoaded={!isLoading} fadeDuration={2} boxSize={{base:"75vw", md:'400px'}}>
+            {image && <Image src={image.urls?.raw || image.message} objectFit='cover' alt={word?.word} boxSize={{base:"75vw", md:'400px'}} />}
           </Skeleton>
         </GridItem>
       </SimpleGrid>

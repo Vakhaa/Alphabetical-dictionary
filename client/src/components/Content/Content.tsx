@@ -16,7 +16,7 @@ const Content: React.FC<{ words: DictionaryWordType[] | undefined, isWordLoading
   const {
     data: image,
     isLoading: isImageLoading
-  } = useSWR<ImageType, ErrorImageType>(word ? `http://localhost:5000/image/${word.word}` : null, fetcher);
+  } = useSWR<ImageType, ErrorImageType>(word ? `${process.env.REACT_APP_SERVER}/image/${word.word}` : null, fetcher);
 
   useEffect(() => {
     if (words && words.length >= 1)
