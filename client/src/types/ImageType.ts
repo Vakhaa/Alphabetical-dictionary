@@ -9,4 +9,8 @@ export type ImageType = {
         "small": string,
         "thumb": string
     },
+    "user"?: {
+        "username": string,
+        "name": string,
+    }
 }

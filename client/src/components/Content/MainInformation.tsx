@@ -8,6 +8,8 @@ import {
   Button,
   HStack,
   Skeleton,
+  Tooltip,
+  Link
 } from '@chakra-ui/react'
 import { ImageType } from '../../types/ImageType';
 import { ErrorImageType } from '../../types/ErrorImageType';
@@ -55,12 +57,22 @@ const MainInformation: React.FC<{
         </GridItem>
         {/* box size for skeleton */}
         <GridItem colSpan={1}>
-          <Skeleton isLoaded={!isLoading} fadeDuration={2} boxSize={{base:"75vw", md:'400px'}}>
-            {image && <Image src={image.urls?.raw || image.message} objectFit='cover' alt={word?.word} boxSize={{base:"75vw", md:'400px'}} />}
+          <Skeleton isLoaded={!isLoading} fadeDuration={2} boxSize={{ base: "75vw", md: '400px' }}>
+            {image && <VStack>
+              <Image src={image.urls?.raw || image.message} objectFit='cover' alt={word?.word} boxSize={{ base: "75vw", md: '400px' }} />
+              <Text>
+                Photo by&nbsp;
+                <Link href={`https://unsplash.com/@${image?.user?.username}?utm_source=alphabetical_dictionary&utm_medium=referral`} color='tomato'>
+                  {image?.user?.name}
+                </Link>
+                &nbsp;on&nbsp;
+                <Link href="https://unsplash.com/?utm_source=alphabetical_dictionary&utm_medium=referral" color='tomato'>Unsplash</Link>
+              </Text>
+            </VStack>}
           </Skeleton>
         </GridItem>
       </SimpleGrid>
-    </VStack>
+    </VStack >
   </>);
 }
 

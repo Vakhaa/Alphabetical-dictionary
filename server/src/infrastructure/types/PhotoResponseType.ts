@@ -5,12 +5,14 @@
  * @property {number} height.required
  * @property {string} color.required
  * @property {UrlsType} urls.required
+ * @property {AuthorPhotoType} user.required
  */
 export type PhotoResponseType = {
     "width": number,
     "height": number,
     "color": string,
     "urls": UrlsType,
+    "user": AuthorPhotoType
 }
 
 /**
@@ -28,4 +30,15 @@ type UrlsType = {
     "regular": string,
     "small": string,
     "thumb": string
+}
+
+/**
+ * The PhotoResponseType property type of user
+ * @typedef {object} AuthorPhotoType
+ * @property {string} username.required
+ * @property {string} name.required
+ */
+type AuthorPhotoType = {
+    "username": string,
+    "name": string,
 }

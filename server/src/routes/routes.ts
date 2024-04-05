@@ -185,8 +185,6 @@ router.get('/image/:word', imageLimiter, async function (req: Request<WordType>,
     const photo = await axios.get<PhotoApiResponseType>(`${process.env.URL_PHOTOS_API}/search/photos?query=${word}&per_page=1`, {
       headers: {
         'Authorization': process.env.PHOTOS_API_TOKEN,
-        "X-Ratelimit-Limit": "2",
-        "X-Ratelimit-Remaining": "1"
       }
     })
 
@@ -197,7 +195,8 @@ router.get('/image/:word', imageLimiter, async function (req: Request<WordType>,
       width: photo.data.results[0].width,
       height: photo.data.results[0].height,
       color: photo.data.results[0].color,
-      urls: photo.data.results[0].urls
+      urls: photo.data.results[0].urls,
+      user:  photo.data.results[0].user
     });
   } catch (error) {
 
