@@ -120,42 +120,55 @@ Endpoints: [alphabetical-dictionary-server.onrender.com/api-docs](https://alphab
 ## :art: Screenshots
 
 1. You can choose any letter and get a random word:
+   
 ![random-word-without-context](https://github.com/Vakhaa/Alphabetical-dictionary/assets/61117394/708731db-6b5a-468b-bfdd-146c6264e599)
 
 2. In the filters, you can set the difficulty level and context for random words:
+   
 ![filters_context_food](https://github.com/Vakhaa/Alphabetical-dictionary/assets/61117394/6edf22eb-4756-48e7-b075-1b7020bbe937)
 
 3. Random word for the letter "k" with the context "food":
+   
 ![random-word-without-context](https://github.com/Vakhaa/Alphabetical-dictionary/assets/61117394/afe029b5-2091-4785-af3e-472f70932845)
 
 4. You could search for a specific word:
+
 ![search-word](https://github.com/Vakhaa/Alphabetical-dictionary/assets/61117394/72b807eb-404e-49a5-b8b8-47b91cde25c0)
 
 5. You can get the contacts, suggestion form form and q&a by clicking on the footer:
+
 ![contacts](https://github.com/Vakhaa/Alphabetical-dictionary/assets/61117394/0f6b9eae-3382-4dd8-bebe-791acb5064cf)
 
 6. Suggestion form:
+
 ![suggestion](https://github.com/Vakhaa/NodeJs_Sandbox_For_Fun/assets/61117394/7d160fea-6bea-4690-945d-0025de6fb2a5)
 
 7. Q&a:
+
 ![q_a](https://github.com/Vakhaa/Alphabetical-dictionary/assets/61117394/2429f956-01ca-479e-aed6-52873cd3a923)
 
 8. Responsive design for the phone:
+
 ![mob_letter](https://github.com/Vakhaa/Alphabetical-dictionary/assets/61117394/f6ae66ce-7ce3-4d0b-9dba-8bb4e75e30d1)
 
 9. Another example:
+
 ![mob_word_banana](https://github.com/Vakhaa/Alphabetical-dictionary/assets/61117394/af033f3a-92c0-44e3-a3ff-67763fa665b5)
 
 10. Open Api:  
+
 ![openapi](https://github.com/Vakhaa/Alphabetical-dictionary/assets/61117394/01fb53f6-857f-44cc-b864-f4eba03f8a16)
 
 11. Open Api Request:  
+
 ![openapi_endpoint](https://github.com/Vakhaa/Alphabetical-dictionary/assets/61117394/a9b26cf1-07cf-4a2a-8a06-6519285310da)
 
 12. Open Api Schema:  
+
 ![openapi_schema](https://github.com/Vakhaa/Alphabetical-dictionary/assets/61117394/18eb0a8a-1ebe-453b-8fe3-42b64408c3a3)
 
 13. Postman:  
+
 ![postman](https://github.com/Vakhaa/NodeJs_Sandbox_For_Fun/assets/61117394/090515d5-dd57-4cca-b740-6471390a36f3)
 
 ---
