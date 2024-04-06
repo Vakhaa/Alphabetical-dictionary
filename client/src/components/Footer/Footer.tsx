@@ -12,29 +12,41 @@ import {
     Box,
     AccordionIcon,
     AccordionPanel,
-    Heading
+    Heading,
+    Tooltip
 } from "@chakra-ui/react";
 import SuggestionForm from "./Suggestion";
 import Contacts from "./Contacts";
 
-const Footer = () => {
+const Footer: React.FC<{ isHome: boolean, showFooter: boolean }> = ({ isHome, showFooter }) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (<>
-        <Button
-            position="absolute"
-            bottom={{ base: '50%', md: '0' }}
-            left={{ base: 'unset', md: '45%' }}
-            right={{ base: '-70px', md: 'unset' }}
-            transform={{ base: 'rotate(-90deg)', md: 'unset' }}
-            p={2}
-            borderTopRadius={10}
-            bg='#00000020'
-            onClick={onOpen}
+        <Tooltip
+            label="You could click to get a contacts or q&a."
+            aria-label='A filters'
+            border="1px solid white"
+            borderRadius="6px"
+            bg='#ff8029'
+            isDisabled={!isHome}
+            isOpen={showFooter}
+            hasArrow
         >
-            @Denys Vynohradnyi
-        </Button>
+            <Button p={2}
+                position="absolute"
+                bottom={{ base: '50%', md: '0' }}
+                left={{ base: 'unset', md: '45%' }}
+                right={{ base: '-70px', md: 'unset' }}
+                transform={{ base: 'rotate(-90deg)', md: 'unset' }}
+                border={isHome ? "1px solid #ff8029" : "unset"}
+                borderTopRadius={10}
+                bg='#00000020'
+                onClick={onOpen}
+            >
+                @Denys Vynohradnyi
+            </Button>
+        </Tooltip>
         <Drawer placement="right" onClose={onClose} isOpen={isOpen} >
             <DrawerOverlay />
             <DrawerContent>

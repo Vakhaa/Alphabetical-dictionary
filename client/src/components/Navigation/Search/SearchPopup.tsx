@@ -42,6 +42,7 @@ const SearchPopup: React.FC<{
 
         return toast({
           position: 'top',
+          duration: 9000,
           isClosable: true,
           render: () => (
             <Box

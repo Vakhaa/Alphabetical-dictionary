@@ -1,7 +1,7 @@
 import { Container, Flex, VStack } from '@chakra-ui/react';
 import AlphabetNavagiator from './components/Navigation/AlphabetNavagiator';
 import Content from './components/Content/Content';
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import useSWR from 'swr';
 import { WordType } from './types/WordType';
 import Footer from './components/Footer/Footer';
@@ -20,6 +20,8 @@ const App: React.FC = () => {
   const [context, setContext] = useState('');
 
   const [isHome, setIsHome] = useState(true);
+  const [showFooter, setShowFooter] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
 
   const {
     data: wordWithoutContext,
@@ -42,6 +44,13 @@ const App: React.FC = () => {
 
   const word = useMemo(() => wordWithoutContext || wordWithContext, [wordWithoutContext, wordWithContext]);
 
+  useEffect(() => {
+    if (showFooter)
+      setTimeout(() => setShowFooter(false), 1000);
+    if (showFilters)
+      setTimeout(() => setShowFilters(false), 1000);
+  }, [showFooter, showFilters])
+
   const {
     data: dictionaryWord,
     error: dictionaryWordError,
@@ -62,13 +71,13 @@ const App: React.FC = () => {
           pr={{ base: 10, md: 5 }}
           alignItems={'flex-start'}
           bg="#F5F5F5" position="relative">
-          <Filters setLevel={setLevel} setContext={setContext} />
+          <Filters setLevel={setLevel} setContext={setContext} isHome={isHome} showFilters={showFilters} />
           {(dictionaryWord || (!dictionaryWord && isDictionaryWordLoading)) && <Content words={dictionaryWord} isWordLoading={isDictionaryWordLoading} />}
-          {isHome && <WelcomeHome />}
+          {isHome && <WelcomeHome setShowFooter={setShowFooter} setShowFilters={setShowFilters} />}
           {dictionaryWordError && <NotFoundContent />}
         </VStack>
 
-        <Footer />
+        <Footer isHome={isHome} showFooter={showFooter} />
       </Flex>
     </Container>
   );
