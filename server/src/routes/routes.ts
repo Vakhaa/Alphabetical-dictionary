@@ -162,8 +162,8 @@ router.get('/dictionary/search/:word', async function (req: Request<WordType>, r
 
 
 const imageLimiter = rateLimit({
-  windowMs: 4 * 15 * 60 * 1000, // 15 minutes
-  limit: 10, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+  windowMs: 4 * 15 * 60 * 1000, // 4*15 minutes
+  limit: 300, // Limit each IP to 300 requests per `window` (here, per 60 minutes).
   standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
   // store: ... , // Redis, Memcached, etc. See below.
