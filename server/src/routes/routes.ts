@@ -196,7 +196,7 @@ router.get('/image/:word', imageLimiter, async function (req: Request<WordType>,
       height: photo.data.results[0].height,
       color: photo.data.results[0].color,
       urls: photo.data.results[0].urls,
-      user:  photo.data.results[0].user
+      user: photo.data.results[0].user
     });
   } catch (error) {
 
@@ -249,6 +249,15 @@ router.post('/mail/send', async function (req: Request, res: Response) {
   }
 });
 
+/**
+ *  GET /
+ * @summary For pinging the server
+ * @param {string} word.path.required
+ * @return {object} 200 - success response
+ */
+router.get('/', async function (req: Request<WordType>, res: Response<PhotoResponseType | NotFoundResponseType>) {
+  res.sendStatus(200);
+});
 
 
 export default router;

@@ -1,7 +1,7 @@
 import { Container, Flex, VStack } from '@chakra-ui/react';
 import AlphabetNavagiator from './components/Navigation/AlphabetNavagiator';
 import Content from './components/Content/Content';
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import useSWR from 'swr';
 import { WordType } from './types/WordType';
 import Footer from './components/Footer/Footer';
@@ -44,13 +44,6 @@ const App: React.FC = () => {
 
   const word = useMemo(() => wordWithoutContext || wordWithContext, [wordWithoutContext, wordWithContext]);
 
-  useEffect(() => {
-    if (showFooter)
-      setTimeout(() => setShowFooter(false), 1000);
-    if (showFilters)
-      setTimeout(() => setShowFilters(false), 1000);
-  }, [showFooter, showFilters])
-
   const {
     data: dictionaryWord,
     error: dictionaryWordError,
@@ -60,6 +53,17 @@ const App: React.FC = () => {
       `${process.env.REACT_APP_SERVER}/dictionary/search/${word?.word.toLowerCase() || search}` :
       null, fetcher
   );
+
+  useEffect(() => {
+    if (showFooter)
+      setTimeout(() => setShowFooter(false), 1000);
+    if (showFilters)
+      setTimeout(() => setShowFilters(false), 1000);
+  }, [showFooter, showFilters])
+
+  useLayoutEffect(()=>{
+    fetch(process.env.REACT_APP_SERVER || "");
+  },[]);
 
   return (
     <Container maxW='100vw' maxH='100vh' p={0} bg='gray.50' overflow={{ base: "scroll", md: "clip" }}>
